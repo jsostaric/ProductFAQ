@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Inchoo\ProductFAQ\Ui\Component\Listing\Column;
 
 use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -35,6 +34,11 @@ class FaqActions extends Column
     private $editUrl;
 
     /**
+     * @var string
+     */
+    protected $visibleUrl;
+
+    /**
      * @var Escaper
      */
     private $escaper;
@@ -44,6 +48,7 @@ class FaqActions extends Column
      * @param UiComponentFactory $uiComponentFactory
      * @param UrlBuilder $actionUrlBuilder
      * @param UrlInterface $urlBuilder
+     * @param Escaper $escaper
      * @param array $components
      * @param array $data
      * @param string $editUrl
@@ -54,6 +59,7 @@ class FaqActions extends Column
         UiComponentFactory $uiComponentFactory,
         UrlBuilder $actionUrlBuilder,
         UrlInterface $urlBuilder,
+        Escaper $escaper,
         array $components = [],
         array $data = [],
         string $editUrl = self::CMS_URL_PATH_EDIT,
@@ -63,6 +69,7 @@ class FaqActions extends Column
         $this->actionUrlBuilder = $actionUrlBuilder;
         $this->editUrl = $editUrl;
         $this->visibleUrl = $visibleUrl;
+        $this->escaper = $escaper;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -70,7 +77,7 @@ class FaqActions extends Column
      * @param array $dataSource
      * @return array
      */
-    public function prepareDataSource(array $dataSource)
+    public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
@@ -87,7 +94,7 @@ class FaqActions extends Column
                         'label' => __('Edit'),
                         '__disableTmpl' => true,
                     ];
-                    $question = $this->getEscaper()->escapeHtml($item['question_content']);
+                    $question = $this->escaper->escapeHtml($item['question_content']);
                     $item[$name]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['faq_id' => $item['faq_id']]),
                         'label' => __('Delete'),
@@ -104,19 +111,5 @@ class FaqActions extends Column
         }
 
         return $dataSource;
-    }
-
-    /**
-     * Get instance of escaper
-     *
-     * @return Escaper
-     * @deprecated 101.0.7
-     */
-    private function getEscaper()
-    {
-        if (!$this->escaper) {
-            $this->escaper = ObjectManager::getInstance()->get(Escaper::class);
-        }
-        return $this->escaper;
     }
 }

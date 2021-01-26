@@ -11,6 +11,11 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class Visible extends Action
 {
     /**
+     * @var FaqRepositoryInterface
+     */
+    protected $faqRepository;
+
+    /**
      * Visible constructor.
      * @param Action\Context $context
      * @param FaqRepositoryInterface $faqRepository

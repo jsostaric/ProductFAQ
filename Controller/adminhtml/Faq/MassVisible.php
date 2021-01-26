@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Controller\Adminhtml\Faq;
 
+use Inchoo\ProductFAQ\Api\Data\FaqInterface;
 use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
@@ -11,6 +12,16 @@ use Magento\Ui\Component\MassAction\Filter;
 
 class MassVisible extends Action
 {
+    /**
+     * @var CollectionFactory
+     */
+    protected $faqCollectionFactory;
+
+    /**
+     * @var Filter
+     */
+    protected $filter;
+
     /**
      * MassVisible constructor.
      * @param Action\Context $context
@@ -25,7 +36,7 @@ class MassVisible extends Action
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws LocalizedException
      */
     public function execute()
@@ -54,10 +65,10 @@ class MassVisible extends Action
     }
 
     /**
-     * @param \Inchoo\ProductFAQ\Api\Data\FaqInterface $item
+     * @param FaqInterface $item
      * @return void
      */
-    protected function toggleVisibility(\Inchoo\ProductFAQ\Api\Data\FaqInterface $item)
+    protected function toggleVisibility(FaqInterface $item)
     {
         $visible = $item->getIsListed();
 

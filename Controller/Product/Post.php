@@ -4,22 +4,28 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Controller\Product;
 
+use Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory;
+use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
-class Post extends Action
+class Post extends Action implements HttpPostActionInterface
 {
+    /**
+     * @var Session
+     */
     protected $customerSession;
 
     /**
-     * @var \Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory
+     * @var FaqInterfaceFactory
      */
     protected $faqModelFactory;
 
     /**
-     * @var \Inchoo\ProductFAQ\Api\FaqRepositoryInterface
+     * @var FaqRepositoryInterface
      */
     protected $faqRepository;
 
@@ -27,14 +33,14 @@ class Post extends Action
      * Post constructor.
      * @param Context $context
      * @param Session $customerSession
-     * @param \Inchoo\ProductFAQ\Api\FaqRepositoryInterface $faqRepository
-     * @param \Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory $faqModelFactory
+     * @param FaqRepositoryInterface $faqRepository
+     * @param FaqInterfaceFactory $faqModelFactory
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        \Inchoo\ProductFAQ\Api\FaqRepositoryInterface $faqRepository,
-        \Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory $faqModelFactory
+        FaqRepositoryInterface $faqRepository,
+        FaqInterfaceFactory $faqModelFactory
     ) {
         parent::__construct($context);
         $this->customerSession = $customerSession;

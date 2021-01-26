@@ -14,35 +14,17 @@ use Magento\Framework\Registry;
 
 class Index extends Action
 {
-    protected $faqRepository;
-    protected $searchCriteriaBuilder;
-    protected $customerSession;
-    protected $faqRegistry;
-
     /**
      * Index constructor.
      * @param Context $context
-     * @param FaqRepositoryInterface $faqRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param Session $customerSession
-     * @param Registry $faqRegistry
      */
-    public function __construct(
-        Context $context,
-        FaqRepositoryInterface $faqRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        Session $customerSession,
-        Registry $faqRegistry
-    ) {
+    public function __construct(Context $context)
+    {
         parent::__construct($context);
-        $this->customerSession = $customerSession;
-        $this->faqRepository = $faqRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->faqRegistry = $faqRegistry;
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
@@ -55,32 +37,7 @@ class Index extends Action
             $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
 
-        //fetch questions associated with user
-        $questions = $this->getQuestions('user_id', $this->getUserId());
-        $this->faqRegistry->register('inchoo_product_faq', $questions);
-
         $resultPage->getConfig()->getTitle()->set(__('My Product Questions'));
         return $resultPage;
-    }
-
-    /**
-     * @param string $field
-     * @param int $value
-     * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface[]
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function getQuestions(string $field, int $value)
-    {
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter($field, $value)->create();
-
-        return $this->faqRepository->getList($searchCriteria)->getItems();
-    }
-
-    /**
-     * @return int
-     */
-    protected function getUserId()
-    {
-        return (int)$this->customerSession->getId();
     }
 }

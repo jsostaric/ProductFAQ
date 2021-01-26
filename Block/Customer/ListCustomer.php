@@ -4,14 +4,27 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Block\Customer;
 
+use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Registry;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
-    protected $faqRegistry;
+    /**
+     * @var FaqRepositoryInterface
+     */
+    protected $faqRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
+     * @var ProductRepository
+     */
     protected $productRepository;
 
     /**
@@ -21,8 +34,9 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
-     * @param Registry $faqRegistry
      * @param ProductRepository $productRepository
+     * @param FaqRepositoryInterface $faqRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $data
      */
     public function __construct(
@@ -31,7 +45,8 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
-        Registry $faqRegistry,
+        FaqRepositoryInterface $faqRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         ProductRepository $productRepository,
         array $data = []
     ) {
@@ -43,16 +58,20 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
             $customerAccountManagement,
             $data
         );
-        $this->faqRegistry = $faqRegistry;
+        $this->faqRepository = $faqRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->productRepository = $productRepository;
     }
 
     /**
-     * @return mixed|null
+     * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface|\Inchoo\ProductFAQ\Api\Data\FaqInterface[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getQuestions()
     {
-        return $this->faqRegistry->registry('inchoo_product_faq');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('user_id', $this->getUserId())->create();
+
+        return $this->faqRepository->getList($searchCriteria)->getItems();
     }
 
     /**
@@ -94,5 +113,13 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     protected function getProduct(string $productId)
     {
         return $this->productRepository->getById($productId);
+    }
+
+    /**
+     * @return int
+     */
+    protected function getUserId(): int
+    {
+        return (int)$this->customerSession->getId();
     }
 }

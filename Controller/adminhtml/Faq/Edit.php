@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Inchoo\ProductFAQ\Controller\Adminhtml\Faq;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 class Edit extends Action

@@ -10,6 +10,11 @@ use Magento\Backend\App\Action;
 class Delete extends Action
 {
     /**
+     * @var FaqRepositoryInterface
+     */
+    protected $faqRepository;
+
+    /**
      * Delete constructor.
      * @param Action\Context $context
      * @param FaqRepositoryInterface $faqRepository
@@ -38,7 +43,7 @@ class Delete extends Action
 
         if ($id) {
             $question = $this->faqRepository->getById((int)$id);
-            $question->delete();
+            $this->faqRepository->delete($question);
         }
 
         return $this->_redirect('productfaq/faq/');

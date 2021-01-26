@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Block;
 
+use Inchoo\ProductFAQ\Api\Data\FaqInterface;
+use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterface;
 use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
@@ -42,8 +44,9 @@ class FAQList extends Template
     }
 
     /**
-     * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface[]
+     * @return FaqInterface|FaqInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getFAQList()
     {
@@ -57,7 +60,7 @@ class FAQList extends Template
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getFilters()
+    protected function getFilters(): array
     {
         $byProduct = $this->filterBuilder
             ->setField('product_id')

@@ -26,7 +26,7 @@ class FAQForm extends Template
     /**
      * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->getUrl(
             'productfaq/product/post',

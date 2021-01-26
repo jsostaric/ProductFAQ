@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Controller\Adminhtml\Faq;
 
+use Inchoo\ProductFAQ\Api\Data\FaqInterface;
 use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
@@ -11,6 +12,16 @@ use Magento\Ui\Component\MassAction\Filter;
 
 class MassDelete extends Action
 {
+    /**
+     * @var CollectionFactory
+     */
+    protected $faqCollectionFactory;
+
+    /**
+     * @var Filter
+     */
+    protected $filter;
+
     /**
      * MassDelete constructor.
      * @param Action\Context $context
@@ -25,7 +36,7 @@ class MassDelete extends Action
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws LocalizedException
      */
     public function execute()
@@ -52,11 +63,11 @@ class MassDelete extends Action
     }
 
     /**
-     * @param \Inchoo\ProductFAQ\Api\Data\FaqInterface $item
+     * @param FaqInterface $item
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    protected function deleteItem(\Inchoo\ProductFAQ\Api\Data\FaqInterface $item)
+    protected function deleteItem(FaqInterface $item)
     {
         $item->delete();
     }

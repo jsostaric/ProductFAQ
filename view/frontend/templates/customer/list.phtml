@@ -1,7 +1,7 @@
 <?php
 /** @var \Inchoo\ProductFAQ\Block\Customer\ListCustomer $block */
 ?>
-<?php if ($block->getQuestions() && !empty($block->getQuestions())) : ?>
+<?php if ($questions = $block->getQuestions()) : ?>
     <div class="page-wrapper faq">
         <?php foreach ($block->getQuestions() as $question) : ?>
         <div class="title-row">

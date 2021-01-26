@@ -11,6 +11,11 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class Save extends Action
 {
     /**
+     * @var FaqRepositoryInterface
+     */
+    protected $faqRepository;
+
+    /**
      * Update constructor.
      * @param Action\Context $context
      * @param FaqRepositoryInterface $faqRepository

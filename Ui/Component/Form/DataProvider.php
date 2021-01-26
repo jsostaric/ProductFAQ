@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Ui\Component\Form;
 
+use Inchoo\ProductFAQ\Model\ResourceModel\Faq\Collection;
+use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 class DataProvider extends AbstractDataProvider
 {
     /**
+     * @var CollectionFactory
+     */
+    protected $faqCollectionFactory;
+
+    /**
      * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param \Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory $collectionFactory
+     * @param CollectionFactory $faqCollectionFactory
      * @param array $meta
      * @param array $data
      */
@@ -21,19 +28,19 @@ class DataProvider extends AbstractDataProvider
         string $name,
         string $primaryFieldName,
         string $requestFieldName,
-        \Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory $collectionFactory,
+        CollectionFactory $faqCollectionFactory,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
 
-        $this->collectionFactory = $collectionFactory;
+        $this->faqCollectionFactory = $faqCollectionFactory;
     }
 
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         $data = [];
         $dataObject = $this->getCollection()
@@ -51,12 +58,12 @@ class DataProvider extends AbstractDataProvider
     /**
      * Overrides Abstract Model getCollection() method
      *
-     * @return \Inchoo\ProductFAQ\Model\ResourceModel\Faq\Collection|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @return \Inchoo\ProductFAQ\Model\ResourceModel\Faq\Collection
      */
-    public function getCollection()
+    public function getCollection(): Collection
     {
         if ($this->collection === null) {
-            $this->collection = $this->collectionFactory->create();
+            $this->collection = $this->faqCollectionFactory->create();
         }
 
         return $this->collection;

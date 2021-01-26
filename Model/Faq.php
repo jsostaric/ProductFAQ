@@ -19,9 +19,9 @@ class Faq extends \Magento\Framework\Model\AbstractModel implements FaqInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
-        return $this->getData(self::FAQ_ID);
+        return (int)$this->getData(self::FAQ_ID);
     }
 
     /**
@@ -29,7 +29,7 @@ class Faq extends \Magento\Framework\Model\AbstractModel implements FaqInterface
      * @param mixed $id
      * @return string
      */
-    public function setId($id)
+    public function setId($id): FaqInterface
     {
         return $this->setData(self::FAQ_ID, $id);
     }
@@ -37,7 +37,7 @@ class Faq extends \Magento\Framework\Model\AbstractModel implements FaqInterface
     /**
      * @return string
      */
-    public function getQuestion()
+    public function getQuestion(): ?string
     {
         return $this->getData(self::QUESTION);
     }
@@ -46,7 +46,7 @@ class Faq extends \Magento\Framework\Model\AbstractModel implements FaqInterface
      * @param string $question
      * @return FaqInterface
      */
-    public function setQuestion(string $question)
+    public function setQuestion(string $question): FaqInterface
     {
         return $this->setData(self::QUESTION, $question);
     }

@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Inchoo\ProductFAQ\Api;
 
+use Inchoo\ProductFAQ\Api\Data\FaqInterface;
+use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 interface FaqRepositoryInterface
@@ -11,21 +15,21 @@ interface FaqRepositoryInterface
      * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById(int $faqId);
+    public function getById(int $faqId): FaqInterface;
 
     /**
      * @param \Inchoo\ProductFAQ\Api\Data\FaqInterface $faq
      * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save(Data\FaqInterface $faq);
+    public function save(Data\FaqInterface $faq): FaqInterface;
 
     /**
      * @param \Inchoo\ProductFAQ\Api\Data\FaqInterface $faq
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete(Data\FaqInterface $faq);
+    public function delete(Data\FaqInterface $faq): bool;
 
     /**
      * Retrieve news matching the specified search criteria

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Inchoo\ProductFAQ\Controller\Adminhtml\Faq;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
+    const MENU_ID = 'Inchoo_ProductFAQ::productfaq';
+
     /**
      * @return bool
      */
@@ -27,7 +30,7 @@ class Index extends Action
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
-//        $resultPage->setActiveMenu('Inchoo_ProductFAQ::productfaq');
+        $resultPage->setActiveMenu(self::MENU_ID);
         $resultPage->getConfig()->getTitle()->prepend(__('FAQs'));
 
         return $resultPage;

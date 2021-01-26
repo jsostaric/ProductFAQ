@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Inchoo\ProductFAQ\Model;
 
 use Inchoo\ProductFAQ\Api\Data;
+use Inchoo\ProductFAQ\Api\Data\FaqInterface;
+use Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory;
+use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterfaceFactory;
 use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
+use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -14,25 +18,44 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class FaqRepository implements FaqRepositoryInterface
 {
+    /**
+     * @var FaqInterfaceFactory
+     */
     protected $faqModelFactory;
+
+    /**
+     * @var ResourceModel\Faq
+     */
     protected $faqResource;
+
+    /**
+     * @var ResourceModel\Faq\CollectionFactory
+     */
     protected $faqCollectionFactory;
+
+    /**
+     * @var FaqSearchResultsInterfaceFactory
+     */
     protected $searchResultsFactory;
+
+    /**
+     * @var CollectionProcessorInterface
+     */
     protected $collectionProcessor;
 
     /**
      * FaqRepository constructor.
-     * @param \Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory $faqModelFactory
-     * @param \Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterfaceFactory $searchResultsFactory
+     * @param FaqInterfaceFactory $faqModelFactory
+     * @param FaqSearchResultsInterfaceFactory $searchResultsFactory
      * @param \Inchoo\ProductFAQ\Model\ResourceModel\Faq $faqResource
-     * @param \Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory $faqCollectionFactory
+     * @param CollectionFactory $faqCollectionFactory
      * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
-        \Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory $faqModelFactory,
-        \Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterfaceFactory $searchResultsFactory,
+        FaqInterfaceFactory $faqModelFactory,
+        FaqSearchResultsInterfaceFactory $searchResultsFactory,
         \Inchoo\ProductFAQ\Model\ResourceModel\Faq $faqResource,
-        \Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory $faqCollectionFactory,
+        CollectionFactory $faqCollectionFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->faqModelFactory = $faqModelFactory;
@@ -44,10 +67,10 @@ class FaqRepository implements FaqRepositoryInterface
 
     /**
      * @param int $faqId
-     * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface
+     * @return FaqInterface
      * @throws NoSuchEntityException
      */
-    public function getById(int $faqId)
+    public function getById(int $faqId): FaqInterface
     {
         $faq = $this->faqModelFactory->create();
         $this->faqResource->load($faq, $faqId);
@@ -59,26 +82,26 @@ class FaqRepository implements FaqRepositoryInterface
     }
 
     /**
-     * @param \Inchoo\ProductFAQ\Api\Data\FaqInterface $faq
-     * @return bool|\Inchoo\ProductFAQ\Api\Data\FaqInterface
+     * @param FaqInterface $faq
+     * @return FaqInterface
      * @throws CouldNotSaveException
      */
-    public function save(\Inchoo\ProductFAQ\Api\Data\FaqInterface $faq)
+    public function save(FaqInterface $faq): FaqInterface
     {
         try {
             $this->faqResource->save($faq);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
         }
-        return true;
+        return $faq;
     }
 
     /**
-     * @param \Inchoo\ProductFAQ\Api\Data\FaqInterface $faq
+     * @param FaqInterface $faq
      * @return bool
      * @throws CouldNotDeleteException
      */
-    public function delete(\Inchoo\ProductFAQ\Api\Data\FaqInterface $faq)
+    public function delete(FaqInterface $faq): bool
     {
         try {
             $this->faqResource->delete($faq);
