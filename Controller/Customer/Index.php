@@ -15,15 +15,6 @@ use Magento\Framework\Registry;
 class Index extends Action
 {
     /**
-     * Index constructor.
-     * @param Context $context
-     */
-    public function __construct(Context $context)
-    {
-        parent::__construct($context);
-    }
-
-    /**
      * @return \Magento\Framework\View\Result\Page
      */
     public function execute()

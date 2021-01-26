@@ -45,8 +45,15 @@
             <action name="visible">
                 <settings>
                     <type>update_status</type>
-                    <label translate="true">Toggle Visible</label>
+                    <label translate="true">Mass Visible</label>
                     <url path="productfaq/faq/massvisible"/>
+                </settings>
+            </action>
+            <action name="invisible">
+                <settings>
+                    <type>update_status</type>
+                    <label translate="true">Mass Invisible</label>
+                    <url path="productfaq/faq/massinvisible"/>
                 </settings>
             </action>
             <action name="delete">

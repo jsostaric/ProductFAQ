@@ -8,15 +8,17 @@ use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\CouldNotSaveException;
 
-class Save extends Action
+class Visible extends Action
 {
+    public const ADMIN_RESOURCE = 'Inchoo_ProductFAQ::productfaq';
+
     /**
      * @var FaqRepositoryInterface
      */
     protected $faqRepository;
 
     /**
-     * Update constructor.
+     * Visible constructor.
      * @param Action\Context $context
      * @param FaqRepositoryInterface $faqRepository
      */
@@ -32,19 +34,16 @@ class Save extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('faq_id');
-
-        $questionContent = $this->getRequest()->getParam('question_content');
-        $answer = $this->getRequest()->getParam('answer_content');
-        if ($id) {
-            try {
+        try {
+            if ($id = $this->getRequest()->getParam('faq_id')) {
                 $question = $this->faqRepository->getById((int)$id);
-                $question->setQuestion($questionContent);
-                $question->setAnswerContent($answer);
-                $question->save();
-            } catch (\Exception $e) {
-                throw new CouldNotSaveException(__($e->getMessage()));
+
+                $isListed = !$question->getIsListed();
+                $question->setIsListed((int)$isListed);
+                $this->faqRepository->save($question);
             }
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Can\'t make changes!'));
         }
 
         return $this->_redirect('productfaq/faq/');

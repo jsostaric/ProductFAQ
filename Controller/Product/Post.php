@@ -11,6 +11,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
+use phpDocumentor\Reflection\Types\This;
 
 class Post extends Action implements HttpPostActionInterface
 {
@@ -76,7 +77,8 @@ class Post extends Action implements HttpPostActionInterface
 
             $this->messageManager->addSuccessMessage('Thank you for your Question.');
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__($e->getMessage()));
+            $this->messageManager->addErrorMessage(__('Question could not be saved'));
+            return $this->_redirect($this->_redirect->getRefererUrl());
         }
 
         return $this->_redirect($this->_redirect->getRefererUrl());

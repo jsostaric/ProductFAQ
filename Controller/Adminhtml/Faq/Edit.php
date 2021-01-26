@@ -9,6 +9,8 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Edit extends Action
 {
+    public const ADMIN_RESOURCE = 'Inchoo_ProductFAQ::productfaq';
+
     /**
      * @return \Magento\Framework\Controller\ResultInterface
      */

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Inchoo\ProductFAQ\Controller\Adminhtml\Faq;
 
 use Inchoo\ProductFAQ\Api\Data\FaqInterface;
+use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
@@ -12,10 +13,17 @@ use Magento\Ui\Component\MassAction\Filter;
 
 class MassVisible extends Action
 {
+    public const ADMIN_RESOURCE = 'Inchoo_ProductFAQ::productfaq';
+
     /**
      * @var CollectionFactory
      */
     protected $faqCollectionFactory;
+
+    /**
+     * @var FaqRepositoryInterface
+     */
+    protected $faqRepository;
 
     /**
      * @var Filter
@@ -27,10 +35,16 @@ class MassVisible extends Action
      * @param Action\Context $context
      * @param Filter $filter
      * @param CollectionFactory $faqCollectionFactory
+     * @param FaqRepositoryInterface $faqRepository
      */
-    public function __construct(Action\Context $context, Filter $filter, CollectionFactory $faqCollectionFactory)
-    {
+    public function __construct(
+        Action\Context $context,
+        Filter $filter,
+        CollectionFactory $faqCollectionFactory,
+        FaqRepositoryInterface $faqRepository
+    ) {
         $this->faqCollectionFactory = $faqCollectionFactory;
+        $this->faqRepository = $faqRepository;
         $this->filter = $filter;
         parent::__construct($context);
     }
@@ -50,7 +64,8 @@ class MassVisible extends Action
             $done = 0;
 
             foreach ($collection->getItems() as $item) {
-                $this->toggleVisibility($item);
+                $item->setIsListed(1);
+                $this->faqRepository->save($item);
                 ++$done;
             }
 
@@ -58,26 +73,9 @@ class MassVisible extends Action
                 $this->messageManager->addSuccess(__('A total of %1 record(s) were modified.', $done));
             }
         } catch (\Exception $e) {
-            throw new LocalizedException(__($e->getMessage()));
+            $this->messageManager->addErrorMessage('Mass Visible could not be executed');
         }
 
         return $resultRedirect->setUrl($this->_redirect->getRefererUrl());
-    }
-
-    /**
-     * @param FaqInterface $item
-     * @return void
-     */
-    protected function toggleVisibility(FaqInterface $item)
-    {
-        $visible = $item->getIsListed();
-
-        if (!$visible) {
-            $item->setIsListed(1);
-        } else {
-            $item->setIsListed(0);
-        }
-
-        $item->save();
     }
 }

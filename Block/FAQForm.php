@@ -9,20 +9,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class FAQForm extends Template
 {
-    protected $_storeManager;
-
-    /**
-     * FAQForm constructor.
-     * @param Template\Context $context
-     * @param StoreManagerInterface $storeManager
-     * @param array $data
-     */
-    public function __construct(Template\Context $context, StoreManagerInterface $storeManager, array $data = [])
-    {
-        parent::__construct($context, $data);
-        $this->_storeManager = $storeManager;
-    }
-
     /**
      * @return string
      */
@@ -41,9 +27,9 @@ class FAQForm extends Template
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getStoreId()
+    protected function getStoreId(): int
     {
-        return $this->_storeManager->getStore()->getId();
+        return (int)$this->_storeManager->getStore()->getId();
     }
 
     /**

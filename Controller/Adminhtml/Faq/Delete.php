@@ -6,17 +6,18 @@ namespace Inchoo\ProductFAQ\Controller\Adminhtml\Faq;
 
 use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Magento\Backend\App\Action;
-use Magento\Framework\Exception\CouldNotSaveException;
 
-class Visible extends Action
+class Delete extends Action
 {
+    public const ADMIN_RESOURCE = 'Inchoo_ProductFAQ::productfaq';
+
     /**
      * @var FaqRepositoryInterface
      */
     protected $faqRepository;
 
     /**
-     * Visible constructor.
+     * Delete constructor.
      * @param Action\Context $context
      * @param FaqRepositoryInterface $faqRepository
      */
@@ -28,27 +29,17 @@ class Visible extends Action
 
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws CouldNotSaveException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('faq_id');
-
-        if ($id) {
-            try {
-                $toggleVisibilityOnPage = $this->faqRepository->getById((int)$id);
-
-                $visible = $toggleVisibilityOnPage->getIsListed();
-
-                if (!$visible) {
-                    $toggleVisibilityOnPage->setIsListed(1);
-                } else {
-                    $toggleVisibilityOnPage->setIsListed(0);
-                }
-                $toggleVisibilityOnPage->save();
-            } catch (\Exception $e) {
-                throw new CouldNotSaveException(__('Can\'t make changes!'));
+        try {
+            if ($id = $this->getRequest()->getParam('faq_id')) {
+                $question = $this->faqRepository->getById((int)$id);
+                $this->faqRepository->delete($question);
             }
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage('Could not delete entry');
         }
 
         return $this->_redirect('productfaq/faq/');

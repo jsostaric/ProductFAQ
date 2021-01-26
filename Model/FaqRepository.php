@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Model;
 
-use Inchoo\ProductFAQ\Api\Data;
 use Inchoo\ProductFAQ\Api\Data\FaqInterface;
 use Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory;
 use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterfaceFactory;

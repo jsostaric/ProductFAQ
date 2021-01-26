@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Ui\Component\Listing;
 
+use Inchoo\ProductFAQ\Model\ResourceModel\Faq\Collection;
 use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
@@ -38,15 +39,11 @@ class DataProvider extends AbstractDataProvider
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         $data = $this->getCollection()->toArray();
         foreach ($data['items'] as &$item) {
-            if (!$item['answer_content']) {
-                $item['has_answer'] = 0;
-            } else {
-                $item['has_answer'] = 1;
-            }
+            $item['has_answer'] = (bool)$item['answer_content'];
         }
 
         return $data;
@@ -57,7 +54,7 @@ class DataProvider extends AbstractDataProvider
      *
      * @return \Inchoo\ProductFAQ\Model\ResourceModel\Faq\Collection
      */
-    public function getCollection()
+    public function getCollection(): Collection
     {
         if ($this->collection === null) {
             $this->collection = $this->faqCollectionFactory->create();
