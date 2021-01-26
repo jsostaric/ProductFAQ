@@ -1,0 +1,12 @@
+<?php
+
+/** @var Inchoo\ProductFAQ\Block\FAQForm $block */
+$list = $block->getFAQList();
+?>
+
+<?php foreach ($list as $item) : ?>
+    <?php if ($block->escapeHtml($item->getAnswerContent())) : ?>
+            <p><strong class="question">Q: <?= $block->escapeHtml($item->getQuestion()) ?></strong></p>
+            <p><i class="answer">A: <?= $block->escapeHtml($item->getAnswerContent()) ?></i></p>
+    <?php endif ?>
+<?php endforeach ?>

@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="inchoo_product_faq" resource="default" engine="innodb" comment="Product FAQ">
+        <column xsi:type="int" name="faq_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Product FAQ ID" />
+        <column xsi:type="int" name="user_id" nullable="false" padding="10" unsigned="true" comment="User ID" identity="false" />
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" padding="10" comment="Product ID"/>
+        <column xsi:type="varchar" name="question_content" nullable="false" length="255" comment="Question content" />
+        <column xsi:type="text" name="answer_content" nullable="true" comment="Answer Content" />
+        <column xsi:type="smallint" name="store_id" nullable="false" unsigned="true" padding="5" comment="Store View ID" />
+        <column xsi:type="int" name="is_listed" nullable="true" default="0" comment="Is Listed on Product page" />
+        <column xsi:type="datetime" name="created_at" nullable="true" default="CURRENT_TIMESTAMP" comment="Created At" />
+        <column xsi:type="datetime" name="updated_at" nullable="true" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="faq_id" />
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="INCHOO_PRODUCT_FAQ_USER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="inchoo_product_faq" column="user_id" referenceTable="customer_entity" referenceColumn="entity_id"
+        />
+        <constraint xsi:type="foreign" referenceId="INCHOO_PRODUCT_FAQ_STORE_ID_STORE_SORE_ID"
+            table="inchoo_product_faq" column="store_id" referenceTable="store" referenceColumn="store_id"
+        />
+        <constraint xsi:type="foreign" referenceId="INCHOO_PRODUCT_FAQ_PRODUCT_ENTITY_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
+                    table="inchoo_product_faq_product_entity" column="product_id"
+                    referenceTable="catalog_product_entity" referenceColumn="entity_id"
+        />
+    </table>
+</schema>

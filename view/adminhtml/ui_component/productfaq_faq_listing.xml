@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">productfaq_faq_listing.productfaq_faq_listing_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <spinner>productfaq_faq_columns</spinner>
+        <deps>
+            <dep>productfaq_faq_listing.productfaq_faq_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="productfaq_faq_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">faq_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Inchoo_ProductFAQ::productfaq</aclResource>
+        <dataProvider class="Inchoo\ProductFAQ\Ui\Component\Listing\DataProvider" name="productfaq_faq_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>faq_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>false</sticky>
+        </settings>
+
+        <!--
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        -->
+
+        <paging name="listing_paging"/>
+        <massaction name="listing_massaction">
+            <action name="visible">
+                <settings>
+                    <type>update_status</type>
+                    <label translate="true">Toggle Visible</label>
+                    <url path="productfaq/faq/massvisible"/>
+                </settings>
+            </action>
+            <action name="delete">
+                <settings>
+                    <type>delete</type>
+                    <label translate="true">Mass Delete</label>
+                    <url path="productfaq/faq/massdelete"/>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+
+    <columns name="productfaq_faq_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>faq_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="faq_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="question_content">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Question</label>
+            </settings>
+        </column>
+        <column name="answer_content">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Answer</label>
+            </settings>
+        </column>
+        <column name="is_listed">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="label" translate="true" xsi:type="string">Listed on Product</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">select</item>
+                    </item>
+                </item>
+            </argument>
+        </column>
+        <column name="has_answer">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="label" translate="true" xsi:type="string">Has Answer</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">select</item>
+                    </item>
+                </item>
+            </argument>
+        </column>
+        <actionsColumn name="actions" class="Inchoo\ProductFAQ\Ui\Component\Listing\Column\FaqActions">
+            <settings>
+                <indexField>faq_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>
