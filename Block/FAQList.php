@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Inchoo\ProductFAQ\Block;
 
 use Inchoo\ProductFAQ\Api\Data\FaqInterface;
-use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterface;
 use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
@@ -14,9 +13,24 @@ use Magento\Framework\View\Element\Template;
 
 class FAQList extends Template
 {
+    /**
+     * @var FaqRepositoryInterface
+     */
     protected $faqRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
     protected $searchCriteriaBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
     protected $filterBuilder;
+
+    /**
+     * @var FilterGroupBuilder
+     */
     protected $filterGroupBuilder;
 
     /**
@@ -48,41 +62,14 @@ class FAQList extends Template
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getFAQList()
+    public function getFAQList(): array
     {
-        $filters = $this->getFilters();
-        $searchCriteria = $this->searchCriteriaBuilder->setFilterGroups($filters)->create();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('is_listed', 1)
+            ->addFilter('product_id', $this->getRequest()->getParam('id'))
+            ->addFilter('store_id', $this->_storeManager->getStore()->getId())
+            ->create();
 
         return $this->faqRepository->getList($searchCriteria)->getItems();
-    }
-
-    /**
-     * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    protected function getFilters(): array
-    {
-        $byProduct = $this->filterBuilder
-            ->setField('product_id')
-            ->setValue($this->getRequest()->getParam('id'))
-            ->setConditionType("eq")->create();
-        $product = $this->filterGroupBuilder
-            ->addFilter($byProduct)->create();
-
-        $byStore = $this->filterBuilder
-            ->setField('store_id')
-            ->setValue($this->_storeManager->getStore()->getId())
-            ->setConditionType("eq")->create();
-        $store = $this->filterGroupBuilder
-            ->addFilter($byStore)->create();
-
-        $isListed = $this->filterBuilder
-            ->setField('is_listed')
-            ->setValue(1)
-            ->setConditionType("eq")->create();
-        $listed = $this->filterGroupBuilder
-            ->addFilter($isListed)->create();
-
-        return [$product, $store, $listed];
     }
 }
