@@ -59,7 +59,6 @@ class MassVisible extends Action
 
         $collection = $this->filter->getCollection($this->faqCollectionFactory->create());
         try {
-
             $done = 0;
 
             foreach ($collection as $item) {

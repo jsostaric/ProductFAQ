@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Inchoo\ProductFAQ\Block\Customer;
 
 use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -37,9 +38,9 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
-     * @param ProductRepository $productRepository
      * @param FaqRepositoryInterface $faqRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ProductRepository $productRepository
      * @param array $data
      */
     public function __construct(
@@ -67,12 +68,14 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     }
 
     /**
-     * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface|\Inchoo\ProductFAQ\Api\Data\FaqInterface[]
+     * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getQuestions()
+    public function getQuestions(): array
     {
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('user_id', $this->getUserId())->create();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('user_id', $this->customerSession->getId())
+            ->create();
 
         return $this->faqRepository->getList($searchCriteria)->getItems();
     }
@@ -81,7 +84,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param string $date
      * @return string
      */
-    public function dateFormat(string $date)
+    public function dateFormat(string $date): string
     {
         return $this->formatDate($date, \IntlDateFormatter::SHORT);
     }
@@ -113,16 +116,8 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @return \Magento\Catalog\Api\Data\ProductInterface|mixed|null
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getProduct(string $productId)
+    protected function getProduct(string $productId): ?Product
     {
         return $this->productRepository->getById($productId);
-    }
-
-    /**
-     * @return int
-     */
-    protected function getUserId(): int
-    {
-        return (int)$this->customerSession->getId();
     }
 }

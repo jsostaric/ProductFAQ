@@ -60,6 +60,7 @@ class Post extends Action implements HttpPostActionInterface
         }
 
         try {
+            /** @var array $data */
             $data = $this->getRequest()->getParams();
             $userId = (int)$this->customerSession->getId();
 
@@ -73,7 +74,7 @@ class Post extends Action implements HttpPostActionInterface
             $question = $this->faqModelFactory->create();
             $question->setProductId((int)$data['product_id']);
             $question->setStoreId((int)$data['store_id']);
-            $question->setUserId((int)$userId);
+            $question->setUserId($userId);
             $question->setQuestion($data['question_field']);
             $this->faqRepository->save($question);
 
@@ -89,10 +90,10 @@ class Post extends Action implements HttpPostActionInterface
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return array
      */
-    protected function validateData($data): array
+    protected function validateData(array $data): array
     {
         $message = [];
 
