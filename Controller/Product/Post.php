@@ -11,7 +11,6 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
-use phpDocumentor\Reflection\Types\This;
 
 class Post extends Action implements HttpPostActionInterface
 {

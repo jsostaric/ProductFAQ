@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Controller\Adminhtml\Faq;
 
-use Inchoo\ProductFAQ\Api\Data\FaqInterface;
 use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Backend\App\Action;
@@ -58,13 +57,13 @@ class MassVisible extends Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
+        $collection = $this->filter->getCollection($this->faqCollectionFactory->create());
         try {
-            $collection = $this->filter->getCollection($this->faqCollectionFactory->create());
 
             $done = 0;
 
-            foreach ($collection->getItems() as $item) {
-                $item->setIsListed(1);
+            foreach ($collection as $item) {
+                $item->setIsListed(!$item->getIsListed());
                 $this->faqRepository->save($item);
                 ++$done;
             }

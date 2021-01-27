@@ -7,7 +7,7 @@
         <column xsi:type="varchar" name="question_content" nullable="false" length="255" comment="Question content" />
         <column xsi:type="text" name="answer_content" nullable="true" comment="Answer Content" />
         <column xsi:type="smallint" name="store_id" nullable="false" unsigned="true" padding="5" comment="Store View ID" />
-        <column xsi:type="int" name="is_listed" nullable="true" default="0" comment="Is Listed on Product page" />
+        <column xsi:type="boolean" name="is_listed" nullable="true" default="0" comment="Is Listed on Product page" />
         <column xsi:type="datetime" name="created_at" nullable="true" default="CURRENT_TIMESTAMP" comment="Created At" />
         <column xsi:type="datetime" name="updated_at" nullable="true" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At" />
         <constraint xsi:type="primary" referenceId="PRIMARY">

@@ -6,6 +6,7 @@ namespace Inchoo\ProductFAQ\Api;
 
 use Inchoo\ProductFAQ\Api\Data\FaqInterface;
 use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterface;
+use Inchoo\ProductFAQ\Model\Faq;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 interface FaqRepositoryInterface

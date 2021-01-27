@@ -11,7 +11,7 @@ interface FaqSearchResultsInterface extends SearchResultsInterface
     /**
      * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface[]
      */
-    public function getItems(): FaqInterface;
+    public function getItems(): array;
 
     /**
      * @param \Inchoo\ProductFAQ\Api\Data\FaqInterface[] $items

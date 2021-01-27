@@ -11,7 +11,7 @@ use Magento\Framework\Controller\ResultFactory;
 class Index extends Action implements HttpGetActionInterface
 {
     public const ADMIN_RESOURCE = 'Inchoo_ProductFAQ::productfaq';
-    const MENU_ID = 'Inchoo_ProductFAQ::productfaq';
+    public const MENU_ID = 'Inchoo_ProductFAQ::productfaq';
 
     /**
      * Index action

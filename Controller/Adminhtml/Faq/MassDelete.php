@@ -66,10 +66,10 @@ class MassDelete extends Action
             }
 
             if ($done) {
-                $this->messageManager->addSuccess(__('A total of %1 record(s) were modified.', $done));
+                $this->messageManager->addSuccess(__('A total of %1 record(s) were deleted.', $done));
             }
         } catch (\Exception $e) {
-            throw new LocalizedException(__($e->getMessage()));
+            $this->messageManager->addErrorMessage(__('Could not delete record(s)'));
         }
 
         return $resultRedirect->setUrl($this->_redirect->getRefererUrl());
