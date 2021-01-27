@@ -17,8 +17,8 @@ class FAQForm extends Template
         return $this->getUrl(
             'productfaq/product/post',
             [
-                'id' => $this->getProductId(),
-                'storeId' => $this->getStoreId()
+                'product_id' => $this->getProductId(),
+                'store_id' => $this->getStoreId()
             ]
         );
     }

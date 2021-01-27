@@ -1,5 +1,5 @@
 {
-    "name": "inchoo/productFAQ",
+    "name": "inchoo/module-productfaq",
     "description": "Magento 2 Product FAQs",
     "type": "magento2-module",
     "version": "1.0.0",

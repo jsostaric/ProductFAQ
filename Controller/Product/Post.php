@@ -60,16 +60,21 @@ class Post extends Action implements HttpPostActionInterface
         }
 
         try {
-            $question_content = $this->getRequest()->getParam('question_field');
+            $data = $this->getRequest()->getParams();
             $userId = (int)$this->customerSession->getId();
-            $productId = (int)$this->getRequest()->getParam('id');
-            $storeId = (int)$this->getRequest()->getParam('storeId');
+
+            $message = $this->validateData($data);
+
+            if ($message) {
+                $this->messageManager->addErrorMessage(__($message));
+                return $this->_redirect($this->_redirect->getRefererUrl());
+            }
 
             $question = $this->faqModelFactory->create();
-            $question->setQuestion($question_content);
-            $question->setStoreId($storeId);
-            $question->setProductId($productId);
+            $question->setProductId($data['product_id']);
+            $question->setStoreId($data['store_id']);
             $question->setUserId($userId);
+            $question->setQuestion($data['question_field']);
             $this->faqRepository->save($question);
 
             $this->_eventManager->dispatch('inchoo_faq_notification', ['question' => $question]);
@@ -81,5 +86,28 @@ class Post extends Action implements HttpPostActionInterface
         }
 
         return $this->_redirect($this->_redirect->getRefererUrl());
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    protected function validateData($data): array
+    {
+        $message = [];
+
+        if (!$data['product_id']) {
+            $message[] = 'Product can not be found';
+        }
+
+        if (!$data['store_id']) {
+            $message[] = 'Store view is not found';
+        }
+
+        if (!trim($data['question_field'])) {
+            $message[] = 'Question field cannot be empty';
+        }
+
+        return $message;
     }
 }

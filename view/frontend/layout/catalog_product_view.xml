@@ -4,7 +4,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="product.info.details">
-            <block class="Magento\Catalog\Block\Product\View" name="faq.tab" as="faq" template="Inchoo_ProductFAQ::faq.phtml" group="detailed_info">
+            <block class="Inchoo\ProductFAQ\Block\ListText" name="faq.tab" as="faq" template="Inchoo_ProductFAQ::faq.phtml" group="detailed_info">
                 <arguments>
                     <argument name="title" xsi:type="string" translate="true">FAQ</argument>
                     <argument name="sort_order" xsi:type="string">101</argument>
