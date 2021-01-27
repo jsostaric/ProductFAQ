@@ -4,32 +4,26 @@ declare(strict_types=1);
 
 namespace Inchoo\ProductFAQ\Block\Customer;
 
-use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
-use Magento\Catalog\Model\Product;
+use Inchoo\ProductFAQ\Model\ResourceModel\Faq\Collection;
+use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
     /**
-     * @var FaqRepositoryInterface
-     */
-    protected $faqRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
      * @var ProductRepository
      */
     protected $productRepository;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $faqCollectionFactory;
 
     /**
      * ListCustomer constructor.
@@ -38,8 +32,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
-     * @param FaqRepositoryInterface $faqRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ProductRepository $productRepository
      * @param array $data
      */
@@ -49,9 +41,8 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
         SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
-        FaqRepositoryInterface $faqRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         ProductRepository $productRepository,
+        CollectionFactory $faqCollectionFactory,
         array $data = []
     ) {
         parent::__construct(
@@ -62,22 +53,26 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
             $customerAccountManagement,
             $data
         );
-        $this->faqRepository = $faqRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->productRepository = $productRepository;
+        $this->faqCollectionFactory = $faqCollectionFactory;
     }
 
     /**
-     * @return \Inchoo\ProductFAQ\Api\Data\FaqInterface[]
+     * @return Collection
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getQuestions(): array
+    public function getQuestions(): Collection
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('user_id', $this->customerSession->getId())
-            ->create();
-
-        return $this->faqRepository->getList($searchCriteria)->getItems();
+        $collection = $this->faqCollectionFactory->create();
+        $collection->addFieldToFilter('user_id', $this->customerSession->getCustomerId());
+        $collection->getSelect()
+            ->join(
+                ['product' => 'catalog_product_entity_varchar'],
+                'main_table.product_id = product.entity_id',
+                'product.value as productName'
+            )
+            ->group('faq_id');
+        return $collection;
     }
 
     /**
@@ -96,28 +91,8 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      */
     public function getProductUrl(string $productId): string
     {
-        $product = $this->getProduct($productId);
+        $product = $this->productRepository->getById($productId);
 
         return $product->getProductUrl();
-    }
-
-    /**
-     * @param string $productId
-     * @return string|null
-     */
-    public function getProductName(string $productId): ?string
-    {
-        $product = $this->getProduct($productId);
-        return $product->getName();
-    }
-
-    /**
-     * @param string $productId
-     * @return \Magento\Catalog\Api\Data\ProductInterface|mixed|null
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    protected function getProduct(string $productId): ?Product
-    {
-        return $this->productRepository->getById($productId);
     }
 }

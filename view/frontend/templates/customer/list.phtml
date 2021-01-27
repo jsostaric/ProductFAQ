@@ -3,26 +3,26 @@
 ?>
 <?php if ($questions = $block->getQuestions()) : ?>
     <div class="page-wrapper faq">
-        <?php foreach ($block->getQuestions() as $question) : ?>
+        <?php foreach ($block->getQuestions()->getData() as $question) : ?>
         <div class="title-row">
             <h4 class="title">
                 Question regarding product
                 <span data-content="<?= $block->escapeHtmlAttr(__('Product Name')) ?>" class="col product-name">
-                    <a href="<?= $block->escapeUrl($block->getProductUrl($question->getProductId())) ?>">
-                        <?= $block->escapeHtml($block->getProductName($question->getProductId())) ?>
+                    <a href="<?= $block->escapeUrl($block->getProductUrl($question['product_id'])) ?>">
+                        <?= $block->escapeHtml($question['productName']) ?>
                     </a>
                 </span>
             </h4>
             <p data-content="<?= $block->escapeHtmlAttr(__('Created')) ?>" class="col date">
-                Created At: <small><?= $block->escapeHtml($block->dateFormat($question->getCreatedAt())) ?></small>
+                Created At: <small><?= $block->escapeHtml($block->dateFormat($question['created_at'])) ?></small>
             </p>
             <p data-content="<?= $block->escapeHtmlAttr(__('Question')) ?>" class="col question-content">
                 <strong class="faq-question">
-                   Q: <?= $block->escapeHtml($question->getQuestionContent()) ?>
+                   Q: <?= $block->escapeHtml($question['question_content']) ?>
                 </strong>
             </p>
             <p data-content="<?= $block->escapeHtmlAttr(__('Answer')) ?>" class="col actions">
-                <i><?= $block->escapeHtml($question->getAnswerContent()) ? '<strong>A:</strong> ' . $block->escapeHtml($question->getAnswerContent()) : 'No answer yet.' ?></i>
+                <i><?= $question['answer_content'] ? '<strong>A:</strong> ' . $block->escapeHtml($question['answer_content']) : 'No answer yet.' ?></i>
             </p>
             <hr>
         </div>
