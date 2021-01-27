@@ -10,9 +10,10 @@ interface FaqInterface
     const QUESTION = 'question_content';
 
     /**
-     * @return int|null
+     * @codingStandardsIgnoreLine - id cannot be set to particular return type
+     * @return int|string
      */
-    public function getId(): ?int;
+    public function getId();
 
     /**
      * @codingStandardsIgnoreLine - id cannot be set to particular type

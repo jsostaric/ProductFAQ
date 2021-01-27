@@ -17,11 +17,12 @@ class Faq extends \Magento\Framework\Model\AbstractModel implements FaqInterface
     }
 
     /**
-     * @return int
+     * @codingStandardsIgnoreLine - id cannot be set to particular return type
+     * @return int|string
      */
-    public function getId(): ?int
+    public function getId()
     {
-        return (int)$this->getData(self::FAQ_ID);
+        return $this->getData(self::FAQ_ID);
     }
 
     /**

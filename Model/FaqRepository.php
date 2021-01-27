@@ -6,11 +6,13 @@ namespace Inchoo\ProductFAQ\Model;
 
 use Inchoo\ProductFAQ\Api\Data\FaqInterface;
 use Inchoo\ProductFAQ\Api\Data\FaqInterfaceFactory;
+use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterface;
 use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterfaceFactory;
 use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -112,9 +114,9 @@ class FaqRepository implements FaqRepositoryInterface
 
     /**
      * @param SearchCriteriaInterface $searchCriteria
-     * @return \Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterface
+     * @return SearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria): SearchResultsInterface
     {
         /** @var \Inchoo\ProductFAQ\Model\ResourceModel\Faq\Collection $collection */
         $collection = $this->faqCollectionFactory->create();

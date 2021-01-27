@@ -17,5 +17,5 @@ interface FaqSearchResultsInterface extends SearchResultsInterface
      * @param \Inchoo\ProductFAQ\Api\Data\FaqInterface[] $items
      * @return $this
      */
-    public function setItems(array $items): FaqSearchResultsInterface;
+    public function setItems(array $items): SearchResultsInterface;
 }

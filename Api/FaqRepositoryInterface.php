@@ -8,6 +8,7 @@ use Inchoo\ProductFAQ\Api\Data\FaqInterface;
 use Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterface;
 use Inchoo\ProductFAQ\Model\Faq;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 
 interface FaqRepositoryInterface
 {
@@ -39,5 +40,5 @@ interface FaqRepositoryInterface
      * @return \Inchoo\ProductFAQ\Api\Data\FaqSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(SearchCriteriaInterface $searchCriteria);
+    public function getList(SearchCriteriaInterface $searchCriteria): SearchResultsInterface;
 }

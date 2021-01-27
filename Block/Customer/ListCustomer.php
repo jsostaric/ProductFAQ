@@ -8,7 +8,10 @@ use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Newsletter\Model\SubscriberFactory;
 
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -29,9 +32,9 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 
     /**
      * ListCustomer constructor.
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param Context $context
+     * @param Session $customerSession
+     * @param SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param ProductRepository $productRepository
@@ -40,9 +43,9 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession, // @codingStandardsIgnoreLine - implemented proxy for session
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        Context $context,
+        Session $customerSession, // @codingStandardsIgnoreLine - implemented proxy for session
+        SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         FaqRepositoryInterface $faqRepository,
@@ -85,10 +88,10 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 
     /**
      * @param string $productId
-     * @return mixed
+     * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getProductUrl(string $productId)
+    public function getProductUrl(string $productId): string
     {
         $product = $this->getProduct($productId);
 
@@ -99,7 +102,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param string $productId
      * @return string|null
      */
-    public function getProductName(string $productId)
+    public function getProductName(string $productId): ?string
     {
         $product = $this->getProduct($productId);
         return $product->getName();

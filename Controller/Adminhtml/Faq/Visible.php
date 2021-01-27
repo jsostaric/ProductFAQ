@@ -35,11 +35,11 @@ class Visible extends Action
     public function execute()
     {
         try {
-            if ($id = $this->getRequest()->getParam('faq_id')) {
-                $question = $this->faqRepository->getById((int)$id);
+            if ($id = (int)$this->getRequest()->getParam('faq_id')) {
+                $question = $this->faqRepository->getById($id);
 
                 $isListed = !$question->getIsListed();
-                $question->setIsListed((int)$isListed);
+                $question->setIsListed((bool)$isListed);
                 $this->faqRepository->save($question);
             }
         } catch (\Exception $e) {

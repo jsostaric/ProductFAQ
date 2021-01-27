@@ -71,9 +71,9 @@ class Post extends Action implements HttpPostActionInterface
             }
 
             $question = $this->faqModelFactory->create();
-            $question->setProductId($data['product_id']);
-            $question->setStoreId($data['store_id']);
-            $question->setUserId($userId);
+            $question->setProductId((int)$data['product_id']);
+            $question->setStoreId((int)$data['store_id']);
+            $question->setUserId((int)$userId);
             $question->setQuestion($data['question_field']);
             $this->faqRepository->save($question);
 
