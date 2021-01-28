@@ -23,4 +23,20 @@ class Collection extends AbstractCollection
             \Inchoo\ProductFAQ\Model\ResourceModel\Faq::class
         );
     }
+
+    /**
+     * @return $this
+     */
+    public function getProductName(): Collection
+    {
+        $this->getSelect()
+            ->join(
+                ['product' => 'catalog_product_entity_varchar'],
+                'main_table.product_id = product.entity_id',
+                'product.value as productName'
+            )
+            ->group('faq_id');
+
+        return $this;
+    }
 }

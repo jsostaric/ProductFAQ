@@ -65,13 +65,8 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     {
         $collection = $this->faqCollectionFactory->create();
         $collection->addFieldToFilter('user_id', $this->customerSession->getCustomerId());
-        $collection->getSelect()
-            ->join(
-                ['product' => 'catalog_product_entity_varchar'],
-                'main_table.product_id = product.entity_id',
-                'product.value as productName'
-            )
-            ->group('faq_id');
+        $collection->getProductName();
+
         return $collection;
     }
 
