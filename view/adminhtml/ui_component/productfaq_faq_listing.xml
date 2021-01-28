@@ -39,9 +39,16 @@
         <massaction name="listing_massaction">
             <action name="visible">
                 <settings>
-                    <type>update_status</type>
-                    <label translate="true">Mass Toggle Visible</label>
+                    <type>set_visible</type>
+                    <label translate="true">Mass set Visible</label>
                     <url path="productfaq/faq/massvisible"/>
+                </settings>
+            </action>
+            <action name="invisible">
+                <settings>
+                    <type>set_invisible</type>
+                    <label translate="true">Mass set Invisible</label>
+                    <url path="productfaq/faq/massinvisible"/>
                 </settings>
             </action>
             <action name="delete">

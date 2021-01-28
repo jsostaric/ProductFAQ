@@ -8,10 +8,9 @@ use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
 use Inchoo\ProductFAQ\Model\Faq;
 use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Backend\App\Action;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 
-class MassDelete extends Action
+class MassInvisible extends Action
 {
     public const ADMIN_RESOURCE = 'Inchoo_ProductFAQ::productfaq';
 
@@ -31,7 +30,7 @@ class MassDelete extends Action
     protected $filter;
 
     /**
-     * MassDelete constructor.
+     * MassInvisible constructor.
      * @param Action\Context $context
      * @param Filter $filter
      * @param CollectionFactory $faqCollectionFactory
@@ -43,35 +42,36 @@ class MassDelete extends Action
         CollectionFactory $faqCollectionFactory,
         FaqRepositoryInterface $faqRepository
     ) {
+        $this->faqRepository = $faqRepository;
         $this->faqCollectionFactory = $faqCollectionFactory;
         $this->filter = $filter;
-        $this->faqRepository = $faqRepository;
         parent::__construct($context);
     }
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
+        $collection = $this->filter->getCollection($this->faqCollectionFactory->create());
         try {
-            $collection = $this->filter->getCollection($this->faqCollectionFactory->create());
             $done = 0;
+
             foreach ($collection as $item) {
-                $this->deleteItem($item);
+                $this->setInvisible($item);
 
                 ++$done;
             }
 
             if ($done) {
-                $this->messageManager->addSuccess(__('A total of %1 record(s) were deleted.', $done));
+                $this->messageManager->addSuccess(__('A total of %1 record(s) were modified.', $done));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('Could not delete record(s)'));
+            $this->messageManager->addErrorMessage('Mass set Invisible could not be executed');
         }
 
         return $resultRedirect->setUrl($this->_redirect->getRefererUrl());
@@ -80,10 +80,11 @@ class MassDelete extends Action
     /**
      * @param Faq $item
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function deleteItem(Faq $item): void
+    protected function setInvisible(Faq $item): void
     {
-        $this->faqRepository->delete($item);
+        $item->setIsListed(0);
+        $this->faqRepository->save($item);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Inchoo\ProductFAQ\Controller\Adminhtml\Faq;
 
 use Inchoo\ProductFAQ\Api\FaqRepositoryInterface;
+use Inchoo\ProductFAQ\Model\Faq;
 use Inchoo\ProductFAQ\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
@@ -62,8 +63,8 @@ class MassVisible extends Action
             $done = 0;
 
             foreach ($collection as $item) {
-                $item->setIsListed(!$item->getIsListed());
-                $this->faqRepository->save($item);
+                $this->setVisible($item);
+
                 ++$done;
             }
 
@@ -75,5 +76,16 @@ class MassVisible extends Action
         }
 
         return $resultRedirect->setUrl($this->_redirect->getRefererUrl());
+    }
+
+    /**
+     * @param Faq $item
+     * @return void
+     * @throws LocalizedException
+     */
+    protected function setVisible(Faq $item): void
+    {
+        $item->setIsListed(1);
+        $this->faqRepository->save($item);
     }
 }

@@ -18,8 +18,18 @@ elements are auto-styled that way. Use Magento javascript form validation if pos
 * Administrator can edit/delete every question (and its owner)
 * Administrator can decide if specific question and its answer is listed in FAQ section of that product on frontend
 
-###Additional
+##Additional
 * Administator gets email when Question is submitted. Implement as separate module.
 (use this magento extension for notifications: https://github.com/jsostaric/magento2-faqNotification)
 * Implement up to two more features of your choice that you think would be usable on such extension.
 * Administrator can relate Question (and its owner) to multiple products instead of one
+
+#Admin Usage
+FAQs can be found under Content menu in admin interface.
+Index page will show grid with all questions that have been asked by customers. 
+Admin can in row action select to:
+ * toggle visibilty of question on product page
+ * can edit question and reply on it
+ * can delete question altogether
+ 
+Admin can also use Mass actions to delete, set visible or set invisible more questions at once. 
