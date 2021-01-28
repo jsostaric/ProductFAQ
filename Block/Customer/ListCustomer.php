@@ -33,6 +33,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param ProductRepository $productRepository
+     * @param CollectionFactory $faqCollectionFactory
      * @param array $data
      */
     public function __construct(
